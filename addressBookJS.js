@@ -9,36 +9,56 @@ var Contact = function (contactDetails) {
 
 function createContact() {
     let contactDetails = new Array();
-    let temp;
     for (var i = 0; i <= fields.length - 1; i++) {
-        let input = true;
-        while (input) {
-            temp = userInput.question(`Enter ${fields[i]}: `);
-            if (temp.match(regexPattern[i])) {
-                contactDetails[i] = temp;
-                input = false;
-            }
-            else {
-                try {
-                    throw new Error('Invalid Input Enter a valid input');
-                }
-                catch (error) {
-                    console.log(error);
-                    continue;
-                }
-            }
-
-        }
+        contactDetails[i] = patternMatch(i);
     }
     let contact = new Contact(contactDetails);
     console.log(contact);
     addressBook.push(contact);
 }
 
+function patternMatch(indexOfregexPattern) {
+    let input = true;
+    while (input) {
+        let userInputData = userInput.question(`Enter ${fields[indexOfregexPattern]}: `);
+        if (userInputData.match(regexPattern[indexOfregexPattern])) {
+            return userInputData;
+        }
+        else {
+            try {
+                throw new Error('Invalid Input Enter a valid input');
+            }
+            catch (error) {
+                console.log(error);
+                continue;
+            }
+        }
+    }
+}
+
+function printContacts() {
+    for (let i = 0; i < addressBook.length; i++) {
+        console.log((i + 1) + ". " + (addressBook[i].contactDetails[0]));
+    }
+    let userEntry = userInput.question();
+    for (let i = 0; i < fields.length; i++) {
+        console.log((i + 1) + ". " + fields[i] + ": " + addressBook[userEntry - 1].contactDetails[i]);
+    }
+    return userEntry - 1;
+}
+
+function editContact() {
+    console.log("Select which contact to be edited: ");
+    let indexOfContact = printContacts();
+    let indexOfContactField = (userInput.question("\nEnter which field to be edited: ") - 1);
+    addressBook[indexOfContact].contactDetails[indexOfContactField] = patternMatch(indexOfContactField);
+    console.log(addressBook[indexOfContact].contactDetails + "\nContact Edited Successfully");
+}
+
 function addressBookService() {
     let userChoice;
     do {
-        userChoice = userInput.question("\n******Menu*****\nEnter 1: Create new Contact \nEnter 2: To Print Contacts \nEnter 0: To Exit: ");
+        userChoice = userInput.question("\n******Menu*****\nEnter 1: Create new Contact \nEnter 2: To Print Contacts \nEnter 3: To Edit a Contact \nEnter 0: To Exit: \n");
         switch (userChoice) {
             case "1":
                 let userEntry;
@@ -48,7 +68,11 @@ function addressBookService() {
                 } while (userEntry == 1);
                 break;
             case "2":
-                console.log(addressBook);
+                console.log("Select a contact to print details: ");
+                printContacts();
+                break;
+            case "3":
+                editContact();
                 break;
             case "0":
                 userChoice = 0;
