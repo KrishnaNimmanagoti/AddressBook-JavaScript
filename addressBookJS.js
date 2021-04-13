@@ -66,11 +66,19 @@ function deleteContactByName() {
     printContactNames();
 }
 
+function getNoOfContacts() {
+    const count = addressBook.reduce((counter, obj) => {
+        counter += 1
+        return counter;
+    }, 0);
+    console.log("Number of Contacts in Address Book: " + count);
+}
+
 function addressBookService() {
     let userChoice;
     do {
         userChoice = userInput.question("\n******Menu*****\nEnter 1: Create new Contact \nEnter 2: To Print Contacts " +
-            "\nEnter 3: To Edit a Contact \nEnter 4: To Delete a Contact \nEnter 0: To Exit: \n");
+            "\nEnter 3: To Edit a Contact \nEnter 4: To Delete a Contact \nEnter 5: To get count of contacts in Addressbook \nEnter 0: To Exit: \n");
         switch (userChoice) {
             case "1":
                 let userEntry;
@@ -89,6 +97,8 @@ function addressBookService() {
             case "4":
                 deleteContactByName();
                 break;
+            case "5":
+                getNoOfContacts();
             case "0":
                 userChoice = 0;
                 break;
