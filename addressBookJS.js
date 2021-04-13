@@ -35,11 +35,14 @@ function patternMatch(indexOfregexPattern) {
         }
     }
 }
-
-function printContacts() {
+function printContactNames() {
     for (let i = 0; i < addressBook.length; i++) {
         console.log((i + 1) + ". " + (addressBook[i].contactDetails[0]));
     }
+}
+
+function printContacts() {
+    printContactNames();
     let userEntry = userInput.question();
     for (let i = 0; i < fields.length; i++) {
         console.log((i + 1) + ". " + fields[i] + ": " + addressBook[userEntry - 1].contactDetails[i]);
@@ -55,16 +58,25 @@ function editContact() {
     console.log(addressBook[indexOfContact].contactDetails + "\nContact Edited Successfully");
 }
 
+function deleteContactByName() {
+    printContactNames();
+    let indexOfNameToBeDelete = (userInput.question("Select a name which contact to be delete: ")) - 1;
+    addressBook.splice(indexOfNameToBeDelete, 1);
+    console.log("Contact deleted Successfully");
+    printContactNames();
+}
+
 function addressBookService() {
     let userChoice;
     do {
-        userChoice = userInput.question("\n******Menu*****\nEnter 1: Create new Contact \nEnter 2: To Print Contacts \nEnter 3: To Edit a Contact \nEnter 0: To Exit: \n");
+        userChoice = userInput.question("\n******Menu*****\nEnter 1: Create new Contact \nEnter 2: To Print Contacts " +
+            "\nEnter 3: To Edit a Contact \nEnter 4: To Delete a Contact \nEnter 0: To Exit: \n");
         switch (userChoice) {
             case "1":
                 let userEntry;
                 do {
                     createContact();
-                    userEntry = userInput.question("Enter 1: To Create more Contacts: \nEnter 2: To go back to menu: ");
+                    userEntry = userInput.question("\nEnter 1: To Create more Contacts: \nEnter 2: To go back to menu: ");
                 } while (userEntry == 1);
                 break;
             case "2":
@@ -73,6 +85,9 @@ function addressBookService() {
                 break;
             case "3":
                 editContact();
+                break;
+            case "4":
+                deleteContactByName();
                 break;
             case "0":
                 userChoice = 0;
