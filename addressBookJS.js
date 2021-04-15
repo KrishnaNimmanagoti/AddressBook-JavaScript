@@ -18,23 +18,34 @@ function createContact() {
 }
 
 function patternMatch(indexOfregexPattern) {
-    let input = true;
-    while (input) {
+    let check = false;
+    while (true) {
         let userInputData = userInput.question(`Enter ${fields[indexOfregexPattern]}: `);
-        if (userInputData.match(regexPattern[indexOfregexPattern])) {
-            return userInputData;
+        if (indexOfregexPattern == 0) {
+            for (let i = 0; i < addressBook.length; i++) {
+                if (addressBook[i].contactDetails[0] == userInputData) {
+                    console.log("Contact is already exists with this name: " + userInputData + ", Please try other name: ");
+                    check = true;
+                    break;
+                }
+            }
         }
-        else {
-            try {
-                throw new Error('Invalid Input Enter a valid input');
-            }
-            catch (error) {
-                console.log(error);
-                continue;
-            }
+        if (check) {
+            check = false;
+            continue;
+        }
+        try {
+            if (userInputData.match(regexPattern[indexOfregexPattern]))
+                return userInputData;
+            else
+                throw Error();
+        }
+        catch (error) {
+            console.log('\nInvalid Input Enter a valid input\n');
         }
     }
 }
+
 function printContactNames() {
     for (let i = 0; i < addressBook.length; i++) {
         console.log((i + 1) + ". " + (addressBook[i].contactDetails[0]));
