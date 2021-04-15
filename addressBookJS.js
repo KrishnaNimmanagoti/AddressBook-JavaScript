@@ -77,12 +77,12 @@ function deleteContactByName() {
     printContactNames();
 }
 
-function getNoOfContacts() {
-    const count = addressBook.reduce((counter, obj) => {
+function getNoOfContacts(contactArrayToBePrint) {
+    const count = contactArrayToBePrint.reduce((counter, obj) => {
         counter += 1;
         return counter;
     }, 0);
-    console.log("Number of Contacts in Address Book: " + count);
+    console.log("\nNumber of Contacts are: " + count);
 }
 
 function searchPersonInCityOrState() {
@@ -96,12 +96,17 @@ function searchPersonInCityOrState() {
 }
 
 function viewPersonsInCityOrState() {
-    let stateOrCityName = userInput.question("Enter City or state Name: ");
+    let stateOrCityName = userInput.question("\nEnter City or state Name: ");
     let savedSearchedContacts = addressBook.filter((contact) => (contact.contactDetails[3] == stateOrCityName | contact.contactDetails[4] == stateOrCityName));
     if (savedSearchedContacts.length == 0)
         console.log("\nNo contacts in city or state: " + stateOrCityName);
     else
         console.log("\n" + savedSearchedContacts.map(contact => contact.contactDetails[0]));
+    return savedSearchedContacts;
+}
+
+function countOfPersonsInCityOrState() {
+    getNoOfContacts(viewPersonsInCityOrState());
 }
 
 function addressBookService() {
@@ -109,7 +114,8 @@ function addressBookService() {
     do {
         userChoice = userInput.question("\n******Menu*****\nEnter 1: Create new Contact \nEnter 2: To Print Contacts " +
             "\nEnter 3: To Edit a Contact \nEnter 4: To Delete a Contact \nEnter 5: To get count of contacts in Addressbook" +
-            "\nEnter 6: To Search person in a City or State \nEnter 7: To View Persons in  City or State \nEnter 0: To Exit: \n");
+            "\nEnter 6: To Search person in a City or State \nEnter 7: To View Persons in  City or State " +
+            "\nEnter 8: TO get no.of persons in city or state \nEnter 0: To Exit: \n");
         switch (userChoice) {
             case "1":
                 let userEntry;
@@ -129,13 +135,16 @@ function addressBookService() {
                 deleteContactByName();
                 break;
             case "5":
-                getNoOfContacts();
+                getNoOfContacts(addressBook);
                 break;
             case "6":
-                searcPersonInCityOrState();
+                searchPersonInCityOrState();
                 break;
             case "7":
                 viewPersonsInCityOrState();
+                break;
+            case "8":
+                countOfPersonsInCityOrState();
                 break;
             case "0":
                 userChoice = 0;
