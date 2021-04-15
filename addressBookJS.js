@@ -79,17 +79,28 @@ function deleteContactByName() {
 
 function getNoOfContacts() {
     const count = addressBook.reduce((counter, obj) => {
-        counter += 1
+        counter += 1;
         return counter;
     }, 0);
     console.log("Number of Contacts in Address Book: " + count);
+}
+
+function searcPersonInCityOrState() {
+    let stateOrCityName = userInput.question("Enter City or state Name: ");
+    let personFirstName = userInput.question("Enter Person Name: ");
+    let searchedContacts = addressBook.filter((contact) => (contact.contactDetails[0] == personFirstName && (contact.contactDetails[3] == stateOrCityName | contact.contactDetails[4] == stateOrCityName)));
+    if(searchedContacts.length == 0)
+        console.log("\nThe contact with name " + personFirstName + " is not in " + stateOrCityName);
+    else
+        console.log("Contact is available: \n" + searchedContacts);
 }
 
 function addressBookService() {
     let userChoice;
     do {
         userChoice = userInput.question("\n******Menu*****\nEnter 1: Create new Contact \nEnter 2: To Print Contacts " +
-            "\nEnter 3: To Edit a Contact \nEnter 4: To Delete a Contact \nEnter 5: To get count of contacts in Addressbook \nEnter 0: To Exit: \n");
+            "\nEnter 3: To Edit a Contact \nEnter 4: To Delete a Contact \nEnter 5: To get count of contacts in Addressbook" +
+            "\nEnter 6: To Search person in a City or State \nEnter 0: To Exit: \n");
         switch (userChoice) {
             case "1":
                 let userEntry;
@@ -110,6 +121,10 @@ function addressBookService() {
                 break;
             case "5":
                 getNoOfContacts();
+                break;
+            case "6":
+                searcPersonInCityOrState();
+                break;
             case "0":
                 userChoice = 0;
                 break;
