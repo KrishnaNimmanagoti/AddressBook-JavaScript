@@ -105,17 +105,18 @@ function viewPersonsInCityOrState() {
     return savedSearchedContacts;
 }
 
-function countOfPersonsInCityOrState() {
-    getNoOfContacts(viewPersonsInCityOrState());
+let sortByPersonsName = (indexOfContactDetails) => { 
+    let allFirstNameInContacts = addressBook.map(contactObject => contactObject.contactDetails[indexOfContactDetails]).sort();
+    return allFirstNameInContacts;
 }
 
 function addressBookService() {
     let userChoice;
     do {
-        userChoice = userInput.question("\n******Menu*****\nEnter 1: Create new Contact \nEnter 2: To Print Contacts " +
+        userChoice = userInput.question("\n******Menu******\n\nEnter 1: Create new Contact \nEnter 2: To Print Contacts " +
             "\nEnter 3: To Edit a Contact \nEnter 4: To Delete a Contact \nEnter 5: To get count of contacts in Addressbook" +
             "\nEnter 6: To Search person in a City or State \nEnter 7: To View Persons in  City or State " +
-            "\nEnter 8: TO get no.of persons in city or state \nEnter 0: To Exit: \n");
+            "\nEnter 8: TO get no.of persons in city or state \nEnter 9: To sort entries by person names \nEnter 0: To Exit: \n");
         switch (userChoice) {
             case "1":
                 let userEntry;
@@ -144,7 +145,10 @@ function addressBookService() {
                 viewPersonsInCityOrState();
                 break;
             case "8":
-                countOfPersonsInCityOrState();
+                getNoOfContacts(viewPersonsInCityOrState());
+                break;
+            case "9":
+                console.log("Persons after SOrting: \n" + sortByPersonsName(0));
                 break;
             case "0":
                 userChoice = 0;
@@ -154,6 +158,6 @@ function addressBookService() {
         }
     } while (userChoice != 0);
     console.log("\nThank You");
-}
+}  
 
 addressBookService();
