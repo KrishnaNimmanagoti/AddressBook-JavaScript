@@ -38,7 +38,7 @@ function patternMatch(indexOfregexPattern) {
             if (userInputData.match(regexPattern[indexOfregexPattern]))
                 return userInputData;
             else
-                throw Error();
+                throw new Error;
         }
         catch (error) {
             console.log('\nInvalid Input Enter a valid input\n');
@@ -92,7 +92,8 @@ function searchPersonInCityOrState() {
     if (searchedContacts.length == 0)
         console.log("\nThe contact with name " + personFirstName + " is not in " + stateOrCityName);
     else
-        console.log("Contact is available: \n" + searchedContacts);
+        console.log("\nContact is available: \n");
+    console.log(searchedContacts);
 }
 
 function viewPersonsInCityOrState() {
@@ -105,9 +106,35 @@ function viewPersonsInCityOrState() {
     return savedSearchedContacts;
 }
 
-let sortByPersonsName = (indexOfContactDetails) => { 
+let sortByPersonsName = (indexOfContactDetails) => {
     let allFirstNameInContacts = addressBook.map(contactObject => contactObject.contactDetails[indexOfContactDetails]).sort();
     return allFirstNameInContacts;
+}
+
+function sortEntriesByCityOrState(indexOfContactDetails) {
+    console.log();
+    let allCityOrStateOrZip = sortByPersonsName(indexOfContactDetails);
+    let uniqueArr = [];
+    for (let i of allCityOrStateOrZip) {
+        if (uniqueArr.indexOf(i) === -1) {
+            uniqueArr.push(i);
+        }
+    }
+    uniqueArr.sort();
+    for (let state of uniqueArr) {
+        let personInSpecificCity = new Array();
+        let i = 0;
+        for (let contact of addressBook) {
+            if (state == contact.contactDetails[indexOfContactDetails]) {
+                personInSpecificCity.push(contact.contactDetails[0]);
+            }
+        }
+        personInSpecificCity.sort();
+        console.log(state);
+        for (person of personInSpecificCity) {
+            console.log(person);
+        }
+    }
 }
 
 function addressBookService() {
@@ -116,7 +143,8 @@ function addressBookService() {
         userChoice = userInput.question("\n******Menu******\n\nEnter 1: Create new Contact \nEnter 2: To Print Contacts " +
             "\nEnter 3: To Edit a Contact \nEnter 4: To Delete a Contact \nEnter 5: To get count of contacts in Addressbook" +
             "\nEnter 6: To Search person in a City or State \nEnter 7: To View Persons in  City or State " +
-            "\nEnter 8: TO get no.of persons in city or state \nEnter 9: To sort entries by person names \nEnter 0: To Exit: \n");
+            "\nEnter 8: TO get no.of persons in city or state \nEnter 9: To sort entries by person names " +
+            "\nEnter 10: To Sort By City or State or Zip \nEnter 0: To Exit: \n");
         switch (userChoice) {
             case "1":
                 let userEntry;
@@ -148,7 +176,11 @@ function addressBookService() {
                 getNoOfContacts(viewPersonsInCityOrState());
                 break;
             case "9":
-                console.log("Persons after SOrting: \n" + sortByPersonsName(0));
+                console.log("Persons after Sorting: \n" + sortByPersonsName(3));
+                break;
+            case "10":
+                let userChoice = (parseInt(userInput.question("\nEnter 1: To Sort by City: \nEnter 2: To Sort by State: \nEnter 3: To Sort by Zip: "))) + 2;
+                sortEntriesByCityOrState(userChoice);
                 break;
             case "0":
                 userChoice = 0;
@@ -158,6 +190,6 @@ function addressBookService() {
         }
     } while (userChoice != 0);
     console.log("\nThank You");
-}  
+}
 
 addressBookService();
